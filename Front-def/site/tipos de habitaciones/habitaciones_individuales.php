@@ -253,7 +253,7 @@
                                         </div>
                                     </li>
                                     <li>
-                                        <p class="rights"><span>&copy;&nbsp;</span><span>2024</span><span>&nbsp;</span><span class="copyright-year"></span>Hotel Copo de Nieve. Reservados todos los derechos.<br><br> Diseñado por:<br> &#9657; Jair Sanchez <br> &#9657; Cristina Molina<br>&#9657; Dylan Villarroel<br> &#9657; Allan Molina</p>
+                                        <p class="rights"><span>&copy;&nbsp;</span><span>2024</span><span>&nbsp;</span><span class="copyright-year"></span>Hotel Copo de Nieve. Reservados todos los derechos.<br></p>
                                     </li>
                                 </ul>
                             </div>
