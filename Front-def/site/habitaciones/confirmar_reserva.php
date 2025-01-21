@@ -2,65 +2,55 @@
 include '../../../basedatos/basedatos.php';
 
 // Verificar si se reciben los parámetros necesarios
-if (isset($_GET['fechaInicio']) && isset($_GET['fechaFin']) && isset($_GET['noches']) && isset($_GET['precioTotal'])) {
-    $fechaInicio = $_GET['fechaInicio'];
-    $fechaFin = $_GET['fechaFin'];
-    $noches = $_GET['noches'];
-    $precioTotal = $_GET['precioTotal'];
-
-    // Verificar disponibilidad
-    $habitacion_id = $_GET['habitacion_id'];
-    $disponible = verificarDisponibilidad($habitacion_id, $fechaInicio, $fechaFin);
-
-    if (!$disponible) {
-        // La habitación no está disponible para las fechas seleccionadas.
-        // Redirigir a una página de habitaciones disponibles o a otra de tu elección.
-        header("Location: habitacion_no_disponible.php");
-        exit();
-    }
+if (isset($_GET['nombre']) && isset($_GET['descripcion']) && isset($_GET['precio'])) {
+    $nombreKit = $_GET['nombre'];
+    $descripcionKit = $_GET['descripcion'];
+    $precioKit = $_GET['precio'];
 
     // Aquí puedes realizar cualquier lógica adicional que necesites
 
 } else {
-    // Si no se proporcionan los parámetros necesarios, redireccionar o manejar el error según sea necesario
-    echo "Error: No se han proporcionado los parámetros necesarios para la reserva.";
+    // Si no se proporcionan los parámetros necesarios, manejar el error
+    echo "Error: No se han proporcionado los parámetros necesarios para el pedido.";
     exit();
 }
 
-function verificarDisponibilidad($habitacion_id, $fechaInicio, $fechaFin) {
+// Función para guardar el pedido en la base de datos
+function guardarPedido($cliente_id, $nombreKit, $descripcionKit, $precioKit) {
     global $mysqli;
 
-    // Consulta SQL para verificar la disponibilidad de la habitación
-    $consultaDisponibilidad = "SELECT hr.ID_HABITACION FROM habitacion_reserva hr
-                              JOIN reserva r ON hr.ID_RESERVA = r.ID_RESERVA
-                              WHERE hr.ID_HABITACION = ? 
-                              AND (r.FECHACHECKIN <= ? AND r.FECHACHECKOUT >= ?)";
-
-    // Usar consulta preparada para seguridad
-    $stmt = $mysqli->prepare($consultaDisponibilidad);
-    $stmt->bind_param("iss", $habitacion_id, $fechaFin, $fechaInicio);
+    // Insertar el pedido en la tabla 'pedidos'
+    $query = "INSERT INTO pedidos (ID_CLIENTE, FECHA_PEDIDO, ESTADO_PEDIDO) VALUES (?, NOW(), 'PENDIENTE')";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param("i", $cliente_id);
     $stmt->execute();
 
-    // Obtener resultados
-    $resultado = $stmt->get_result();
+    // Obtener el ID del pedido recién insertado
+    $pedido_id = $mysqli->insert_id;
 
-    // Verificar si hay reservas que coincidan
-    if ($resultado->num_rows > 0) {
-        // La habitación no está disponible en esas fechas
-        return false;
-    } else {
-        // La habitación está disponible
-        return true;
-    }
+    // Insertar el detalle del pedido en 'detalle_pedidos'
+    $queryDetalle = "INSERT INTO detalle_pedidos (ID_PEDIDO, ID_KIT, CANTIDAD) VALUES (?, (SELECT ID_KIT FROM kits WHERE NOMBRE = ?), 1)";
+    $stmtDetalle = $mysqli->prepare($queryDetalle);
+    $stmtDetalle->bind_param("is", $pedido_id, $nombreKit);
+    $stmtDetalle->execute();
+
+    // Registrar el pago si es necesario (aquí agregamos una suposición de pago)
+    $queryPago = "INSERT INTO pagos (ID_PEDIDO, MONTO, METODO_PAGO, FECHA_PAGO) VALUES (?, ?, 'PayPal', NOW())";
+    $stmtPago = $mysqli->prepare($queryPago);
+    $stmtPago->bind_param("id", $pedido_id, $precioKit);
+    $stmtPago->execute();
+
+    return $pedido_id;
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmar Reserva</title>
+    <title>Confirmar Pedido</title>
     <script src="https://www.paypal.com/sdk/js?client-id=AfqN64i5tt3K3cwlMxyxGxAqRWV17XV2pyGW7M-CZW_Hds9QhVXKuUcApmXhUo2wr-u8yLow5m33wWzl&currency=USD"></script>
     <style>
         body {
@@ -139,43 +129,37 @@ function verificarDisponibilidad($habitacion_id, $fechaInicio, $fechaFin) {
 </head>
 <body>
     <div class="container">
-        <h1>Confirmación de Reserva</h1>
-        <p><strong>Fecha de Check-in:</strong> <?php echo $fechaInicio; ?></p>
-        <p><strong>Fecha de Check-out:</strong> <?php echo $fechaFin; ?></p>
-        <p><strong>Noches:</strong> <?php echo $noches; ?></p>
-        <p><strong>Precio Total:</strong> <?php echo $precioTotal; ?></p>
+        <h1>Confirmación de Pedido</h1>
+        <p><strong>Kit:</strong> <?php echo $nombreKit; ?></p>
+        <p><strong>Descripción:</strong> <?php echo $descripcionKit; ?></p>
+        <p><strong>Precio:</strong> <?php echo $precioKit; ?></p>
 
         <!-- Formulario de detalles del cliente -->
-        <form id="confirmarReservaForm" method="post" action="procesar_reserva.php">
-            <input type="hidden" name="fechaInicio" value="<?php echo $fechaInicio; ?>">
-            <input type="hidden" name="fechaFin" value="<?php echo $fechaFin; ?>">
-            <input type="hidden" name="noches" value="<?php echo $noches; ?>">
-            <input type="hidden" name="precioTotal" value="<?php echo $precioTotal; ?>">
-            <input type="hidden" name="habitacion_id" value="<?php echo $habitacion_id; ?>">
+        <form id="confirmarPedidoForm" method="post" action="procesar_pedido.php">
+            <input type="hidden" name="nombre" value="<?php echo $nombreKit; ?>">
+            <input type="hidden" name="descripcion" value="<?php echo $descripcionKit; ?>">
+            <input type="hidden" name="precio" value="<?php echo $precioKit; ?>">
 
-            <label for="nombre">Nombre:</label>
-            <input type="text" name="nombre" required placeholder="Ingrese su nombre">
+            <label for="nombre_cliente">Nombre:</label>
+            <input type="text" name="nombre_cliente" required placeholder="Ingrese su nombre">
 
-            <label for="apellido">Apellido:</label>
-            <input type="text" name="apellido" required placeholder="Ingresa tu apellido">
+            <label for="apellido_cliente">Apellido:</label>
+            <input type="text" name="apellido_cliente" required placeholder="Ingresa tu apellido">
 
-            <label for="celular">Celular:</label>
-            <input type="text" name="celular" required placeholder="Ingresa tu numero celular">
+            <label for="celular_cliente">Celular:</label>
+            <input type="text" name="celular_cliente" required placeholder="Ingresa tu numero celular">
 
-            <label for="email">Email:</label>
-            <input type="email" name="email" required placeholder="alguien@gmail.com">
+            <label for="email_cliente">Email:</label>
+            <input type="email" name="email_cliente" required placeholder="alguien@gmail.com">
 
-            <button type="button" onclick="validarYMostrarPaypal()">Confirmar Reserva</button>
-
-           
+            <button type="button" onclick="validarYMostrarPaypal()">Confirmar Pedido</button>
 
             <!-- Campo oculto para indicar que el pago se realizó a través de PayPal -->
             <input type="hidden" name="paypal_payment" value="1">
         </form>
-        
 
         <div id="paypal-button-container">
-            <h4>Para confirmar su reserva paga con:</h4>
+            <h4>Para confirmar su pedido, paga con:</h4>
         </div>
     </div>
 
@@ -183,7 +167,7 @@ function verificarDisponibilidad($habitacion_id, $fechaInicio, $fechaFin) {
         function validarYMostrarPaypal() {
             if (validarFormulario()) {
                 // Deshabilitar el botón después de la validación exitosa
-                document.querySelector('#confirmarReservaForm button').disabled = true;
+                document.querySelector('#confirmarPedidoForm button').disabled = true;
 
                 // Mostrar el botón de PayPal
                 document.getElementById('paypal-button-container').style.display = 'block';
@@ -194,12 +178,10 @@ function verificarDisponibilidad($habitacion_id, $fechaInicio, $fechaFin) {
         }
 
         function validarFormulario() {
-            // Agrega aquí la lógica de validación del formulario si es necesario
-            // Por ejemplo, puedes verificar que todos los campos estén llenos
-            var inputs = document.querySelectorAll('#confirmarReservaForm input[required]');
+            var inputs = document.querySelectorAll('#confirmarPedidoForm input[required]');
             for (var i = 0; i < inputs.length; i++) {
                 if (!inputs[i].value.trim()) {
-                    alert('Por favor, complete todos los campos antes de confirmar la reserva.');
+                    alert('Por favor, complete todos los campos antes de confirmar el pedido.');
                     return false;
                 }
             }
@@ -207,20 +189,19 @@ function verificarDisponibilidad($habitacion_id, $fechaInicio, $fechaFin) {
         }
 
         function iniciarPaypal() {
-            // Configurar el flujo de PayPal
             paypal.Buttons({
                 createOrder: function(data, actions) {
                     return actions.order.create({
                         purchase_units: [{
                             amount: {
-                                value: '<?php echo $precioTotal; ?>'
+                                value: '<?php echo $precioKit; ?>'
                             }
                         }]
                     });
                 },
                 onApprove: function(data, actions) {
                     // Después de la aprobación de PayPal, enviar el formulario
-                    document.getElementById('confirmarReservaForm').submit();
+                    document.getElementById('confirmarPedidoForm').submit();
                 }
             }).render('#paypal-button-container');
         }

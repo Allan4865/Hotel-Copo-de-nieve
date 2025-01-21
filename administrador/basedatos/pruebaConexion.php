@@ -1,6 +1,6 @@
 <?php
 // basedatos.php
-$mysqli = new mysqli("localhost", "root", "", "hotel3");
+$mysqli = new mysqli("localhost", "root", "", "kits");
 
 // Verificar si la conexión se estableció correctamente
 if ($mysqli->connect_errno) {
