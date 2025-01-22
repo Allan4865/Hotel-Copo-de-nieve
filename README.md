@@ -1,6 +1,4 @@
-Se trabaja con una arquitectura donde el servidor sera mysql y trabajaremos con php para el backend y javascript
-para dotras funcionaldiades, ademas se trabajara para el diseño con css y boostrap para hacerlo responsive.
-Ademas se documentara todo el proceso de codigo para seguir normas de calidad.
-Trabajaremos con bastante seguridad escencialmente encriptando datoas importantes para evitar ataques comunes.
-Este modulo se trabajara la base de datos y verificaremos conecciones exitosas.
-Integrantes
+- En Windows instala XAMPP, agrega los archivos en la carpeta `XAMPP/htdocs`.
+- Para la base de datos ingresa a `phpmyadmin` desde XAMPP o `localhost/phpmyadmin/`, descarga la base de datos `hotel3` e importa la base.
+- Para poder ejecutar la **página principal** hay que ir a la carpeta `Front-def/site/index.html`.
+- Para poder ejecutar el panel de **administración** hay que ir a la carpeta `administrador/index.php`
