@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-01-2025 a las 07:24:48
+-- Tiempo de generación: 22-01-2025 a las 08:48:54
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -42,7 +42,18 @@ CREATE TABLE `cliente` (
 INSERT INTO `cliente` (`ID_CLIENTE`, `NOMBRE`, `APELLIDO`, `CELULAR`, `EMAIL`) VALUES
 (1, 'Carlos', 'Ramírez', '0999999991', 'carlos.ramirez@email.com'),
 (2, 'Lucía', 'Fernández', '0999999992', 'lucia.fernandez@email.com'),
-(3, 'Pedro', 'González', '0999999993', 'pedro.gonzalez@email.com');
+(3, 'Pedro', 'González', '0999999993', 'pedro.gonzalez@email.com'),
+(4, '', '', '', ''),
+(5, 'Allan', 'Molina', '0959610833', 'adrianmolina782@gmail.com'),
+(6, 'Allan', 'Molinari', '0959610833', 'adrianmolina782@gmail.com'),
+(7, 'Allan', 'Molina', '0959610833', 'adrianmolina782@gmail.com'),
+(8, 'Allan', 'Molina', '0959610833', 'adrianmolina782@gmail.com'),
+(9, 'Adrian', 'Molina', '0959610758', 'adrianmolina410@gmail.com'),
+(10, 'Allan', 'Molina', '0959610758', 'adrianmolina410@gmail.com'),
+(11, 'Allan', 'Molinari', '0959610758', 'adrianmolina782@gmail.com'),
+(12, 'Allan', 'Molina', '0959610833', 'adrianmolina782@gmail.com'),
+(13, 'Allan', 'Molina', '0959610833', 'adrianmolina782@gmail.com'),
+(14, 'Cristina', 'Molina', '0959610758', 'adrianmolina782@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -72,7 +83,9 @@ INSERT INTO `comentarios` (`ID_COMENTARIO`, `COMENTARIO`, `COMENTARIO_NOMBRE`, `
 (13, 'El producto llegó tarde, pero funciona bien.', 'Miguel Torres', '2025-01-14 11:10:00', 3),
 (14, 'No lo recomendaría, muy baja calidad.', 'Paula Fernández', '2025-01-13 20:30:00', 1),
 (15, 'Buen precio y buena calidad, muy satisfecho.', 'Diego Castro', '2025-01-12 08:25:00', 4),
-(16, 'Regular, no es tan bueno como esperaba.', 'Laura Hernández', '2025-01-11 15:40:00', 3);
+(16, 'Regular, no es tan bueno como esperaba.', 'Laura Hernández', '2025-01-11 15:40:00', 3),
+(17, 'Buenos productos', 'Carlos Perez', '2025-01-22 06:38:39', 5),
+(18, 'No tan bueno', 'Carlos Lopez', '2025-01-22 08:19:25', 2);
 
 -- --------------------------------------------------------
 
@@ -95,7 +108,14 @@ INSERT INTO `detalle_pedidos` (`ID_PEDIDO`, `ID_KIT`, `CANTIDAD`) VALUES
 (1, 5, 1),
 (2, 8, 1),
 (2, 12, 1),
-(3, 15, 3);
+(3, 15, 3),
+(6, 6, 1),
+(7, 2, 1),
+(8, 3, 1),
+(9, 2, 1),
+(10, 2, 1),
+(11, 2, 1),
+(12, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -153,11 +173,11 @@ CREATE TABLE `kits` (
 
 INSERT INTO `kits` (`ID_KIT`, `NOMBRE`, `DESCRIPCION`, `PRECIO`, `STOCK`) VALUES
 (1, 'Kit Arduino Básico', 'Incluye Arduino UNO, cables y sensores básicos', 50.00, 10),
-(2, 'Kit Arduino Avanzado', 'Incluye Arduino MEGA, motores y sensores avanzados', 80.00, 8),
-(3, 'Kit Robot Seguidor de Línea', 'Componentes para armar un robot autónomo', 100.00, 5),
+(2, 'Kit Arduino Avanzado', 'Incluye Arduino MEGA, motores y sensores avanzados', 80.00, -1),
+(3, 'Kit Robot Seguidor de Línea', 'Componentes para armar un robot autónomo', 100.00, -1),
 (4, 'Kit IoT con ESP8266', 'Placa ESP8266 con sensores para IoT', 60.00, 10),
 (5, 'Kit IoT con ESP32', 'Placa ESP32 con sensores y conectividad avanzada', 75.00, 8),
-(6, 'Kit Smart Home', 'Sensores y actuadores para domótica', 120.00, 5),
+(6, 'Kit Smart Home', 'Sensores y actuadores para domótica', 120.00, -1),
 (7, 'Kit de Electrónica Básica', 'Resistencias, capacitores, LEDs y más', 30.00, 15),
 (8, 'Kit de Electrónica Intermedia', 'Incluye transistores y circuitos integrados', 45.00, 12),
 (9, 'Kit de Electrónica Avanzada', 'Osciloscopio portátil y componentes avanzados', 90.00, 6),
@@ -190,7 +210,14 @@ CREATE TABLE `pagos` (
 --
 
 INSERT INTO `pagos` (`ID_PAGO`, `ID_PEDIDO`, `MONTO`, `METODO_PAGO`, `FECHA_PAGO`) VALUES
-(1, 2, 135.00, 'Tarjeta de Crédito', '2025-01-19 15:00:00');
+(1, 2, 135.00, 'Tarjeta de Crédito', '2025-01-19 15:00:00'),
+(2, 6, 0.00, 'PayPal', '2025-01-21 23:19:28'),
+(3, 7, 0.00, 'PayPal', '2025-01-21 23:40:36'),
+(4, 8, 0.00, 'PayPal', '2025-01-21 23:56:37'),
+(5, 9, 0.00, 'PayPal', '2025-01-22 00:20:26'),
+(6, 10, 0.00, 'PayPal', '2025-01-22 00:28:12'),
+(7, 11, 0.00, 'PayPal', '2025-01-22 00:44:59'),
+(8, 12, 0.00, 'PayPal', '2025-01-22 02:21:34');
 
 -- --------------------------------------------------------
 
@@ -212,7 +239,16 @@ CREATE TABLE `pedidos` (
 INSERT INTO `pedidos` (`ID_PEDIDO`, `ID_CLIENTE`, `FECHA_PEDIDO`, `ESTADO_PEDIDO`) VALUES
 (1, 1, '2025-01-20 10:30:00', 'PENDIENTE'),
 (2, 2, '2025-01-19 14:45:00', 'COMPLETADO'),
-(3, 3, '2025-01-18 09:15:00', 'CANCELADO');
+(3, 3, '2025-01-18 09:15:00', 'CANCELADO'),
+(4, 6, '2025-01-21 23:17:44', 'PENDIENTE'),
+(5, 7, '2025-01-21 23:18:45', 'PENDIENTE'),
+(6, 8, '2025-01-21 23:19:28', 'PENDIENTE'),
+(7, 9, '2025-01-21 23:40:36', 'PENDIENTE'),
+(8, 10, '2025-01-21 23:56:37', 'PENDIENTE'),
+(9, 11, '2025-01-22 00:20:26', 'COMPLETADO'),
+(10, 12, '2025-01-22 00:28:12', 'COMPLETADO'),
+(11, 13, '2025-01-22 00:44:59', 'COMPLETADO'),
+(12, 14, '2025-01-22 02:21:34', 'COMPLETADO');
 
 -- --------------------------------------------------------
 
@@ -299,13 +335,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `ID_CLIENTE` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_CLIENTE` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `comentarios`
 --
 ALTER TABLE `comentarios`
-  MODIFY `ID_COMENTARIO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `ID_COMENTARIO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `imagenes_kits`
@@ -323,13 +359,13 @@ ALTER TABLE `kits`
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `ID_PAGO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_PAGO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `ID_PEDIDO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_PEDIDO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
