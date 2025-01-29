@@ -22,10 +22,10 @@ function obtenerDatosCliente($email, $cod_pedido){
 
   // Consulta SQL para obtener todos los datos del cliente
   $consultaDatosCliente = "SELECT pedidos.ID_PEDIDO, pedidos.ID_CLIENTE, pedidos.FECHA_PEDIDO, 
-  Cliente.NOMBRE, Cliente.APELLIDO, Cliente.EMAIL
+  cliente.NOMBRE, cliente.APELLIDO, cliente.EMAIL
   FROM pedidos
-  JOIN Cliente ON pedidos.ID_CLIENTE = Cliente.ID_CLIENTE
-  WHERE Cliente.EMAIL = '$email'
+  JOIN cliente ON pedidos.ID_CLIENTE = cliente.ID_CLIENTE
+  WHERE cliente.EMAIL = '$email'
   AND pedidos.ID_PEDIDO = $cod_pedido;";
 
   // Ejecutar la consulta
@@ -55,7 +55,7 @@ function obtenerKitsReservados($email, $cod_pedido) {
 
   // Consulta SQL para obtener todos los kits reservados, incluyendo la cantidad y la imagen
   $consultaKitsReservados = "SELECT k.ID_KIT, k.NOMBRE, k.DESCRIPCION, k.PRECIO, k.STOCK, ik.URL AS IMAGEN, dp.CANTIDAD
-  FROM Cliente c
+  FROM cliente c
   JOIN pedidos p ON c.ID_CLIENTE = p.ID_CLIENTE
   JOIN detalle_pedidos dp ON p.ID_PEDIDO = dp.ID_PEDIDO
   JOIN kits k ON dp.ID_KIT = k.ID_KIT
