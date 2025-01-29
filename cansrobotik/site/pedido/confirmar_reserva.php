@@ -138,7 +138,7 @@ if (isset($_GET['nombre']) && isset($_GET['descripcion']) && isset($_GET['precio
         <form id="confirmarReservaForm" method="post" action="procesar_reserva.php">
             <input type="hidden" name="nombreKit" value="<?php echo $nombre; ?>">
             <input type="hidden" name="descripcionKit" value="<?php echo $descripcion; ?>">
-            <input type="hidden" name="precioKit" value="<?php echo $precio; ?>">
+            <input type="hidden" name="precioKit" value="<?php echo $precioKit; ?>">
             <input type="hidden" name="id_kit" value="<?php echo $id_kit; ?>">
             <input type="hidden" name="cantidadKit" value="<?php echo $cantidad; ?>">
 
