@@ -251,8 +251,8 @@ try {
     $mail->isSMTP();
     $mail->Host       = 'smtp.gmail.com'; // Cambia esto con la información de tu servidor SMTP
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'adrianmolina410@gmail.com'; // Cambia esto con tu dirección de correo
-    $mail->Password   = 'lcai uetq vqoo igks'; // Cambia esto con tu contraseña
+    $mail->Username   = ''; // Cambia esto con tu dirección de correo
+    $mail->Password   = ''; // Cambia esto con tu contraseña
     $mail->SMTPSecure = 'tls'; // Puedes cambiarlo a 'ssl' si es necesario
     $mail->Port       = 587; // Puedes cambiar el puerto según la configuración de tu servidor
     
