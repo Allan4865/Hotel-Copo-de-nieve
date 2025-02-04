@@ -51,7 +51,7 @@ if (isset($_GET['nombre']) && isset($_GET['descripcion']) && isset($_GET['precio
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmar Reserva</title>
-    <script src="https://www.paypal.com/sdk/js?client-id=AfqN64i5tt3K3cwlMxyxGxAqRWV17XV2pyGW7M-CZW_Hds9QhVXKuUcApmXhUo2wr-u8yLow5m33wWzl&currency=USD"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id="tuIdDePayPalSandboxAqui"&currency=USD"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
